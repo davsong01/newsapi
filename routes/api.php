@@ -12,12 +12,16 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
+//uses cors and json.response middleware to ensure all responses are sent back as json
+//Open endpoints
 Route::group(['middleware' => ['cors', 'json.response']], function () {
     Route::post('/login', 'Auth\ApiAuthController@login')->name('login.api');
     Route::post('/register','Auth\ApiAuthController@register')->name('register.api'); 
     Route::post('/logout', 'Auth\ApiAuthController@logout')->name('logout.api');
 });
 
+//Protected endpoints
 Route::middleware('auth:api')->group(function () {
     Route::resource('articles', 'ArticleController');
     Route::get('writers', 'WriterController@index');
@@ -25,7 +29,3 @@ Route::middleware('auth:api')->group(function () {
     Route::post('/logout', 'Auth\ApiAuthController@logout')->name('logout.api');
 });
 
-
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });

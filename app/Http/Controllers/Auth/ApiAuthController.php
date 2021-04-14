@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ApiAuthController extends Controller
 {
+    //Handle registration
     public function register (Request $request) {
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
@@ -30,7 +31,7 @@ class ApiAuthController extends Controller
 
         return response($response, 200);
     }
-
+    //Handles login
     public function login (Request $request) {
         $validator = Validator::make($request->all(), [
             'email' => 'required|string|email|max:255',
@@ -56,6 +57,7 @@ class ApiAuthController extends Controller
         }
     }
 
+    //Handles logout
     public function logout (Request $request) {
         $token = $request->user()->token();
         $token->revoke();
