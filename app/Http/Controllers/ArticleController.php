@@ -18,7 +18,9 @@ class ArticleController extends Controller
         $articles = Article::with('user')->get();
 
         foreach($articles as $article){
+            //We want to display the user that has this post as Writer by assigning the user collection to a new index: writer
             $article['Writer'] = $article['user'];
+            //We delete the user index
             unset($article['user']);
         }
 
@@ -33,7 +35,7 @@ class ArticleController extends Controller
             'content' => 'min:20',
         ]);
        
-
+        //Add new article, auto-add the authenticated user id in the user_id column
         $article = Article::Create([
             'title' => $data['title'],
             'user_id' => auth()->user()->id,
@@ -53,7 +55,7 @@ class ArticleController extends Controller
 
     public function update(Request $request, Article $article)
     {
-        
+        //Ensure authenticated user doesnt update other writer's article
         if($article->user->id <> auth()->user()->id){
             $response = ['error' => 'You cannot edit other writer article'];
 
@@ -69,7 +71,7 @@ class ArticleController extends Controller
 
     public function destroy(Article $article)
     {
-        
+        //Ensure authenticated user doesnt delete other writer's article
         if($article->user->id <> auth()->user()->id){
             $response = ['error' => 'You cannot delete other writer article'];
 
